@@ -19,7 +19,7 @@ public class DataInitializer {
 
 	@PostConstruct
 	public void initData() {
-		bankRepository.save(new BankAccount("9123758964", "Kathy Joe", 1000.00));
-		bankRepository.save(new BankAccount("9123757254", "Jane Smith", 500.00));
+		bankRepository.save(new BankAccount("Kathy Joe", "9123758964", 1000.00));
+		bankRepository.save(new BankAccount("Jane Smith", "9123757254", 500.00));
 	}
 }

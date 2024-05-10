@@ -16,33 +16,32 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DataJpaTest
 public class BankRepositoryTest {
 
-    @Autowired
-    private BankRepository bankRepository;
-    
-    List<BankAccount> account = new ArrayList<BankAccount>();
+	@Autowired
+	private BankRepository bankRepository;
 
-    @BeforeEach
-    void setUp() {
-        account.add(new BankAccount("Kathy Jane", "2587469545", 500.00));
+	List<BankAccount> account = new ArrayList<BankAccount>();
+
+	@BeforeEach
+	void setUp() {
+		account.add(new BankAccount("Kathy Jane", "2587469545", 500.00));
 		account.add(new BankAccount("Daniel Smith", "5896334587", 710.00));
-    }
+	}
 
-    @Test
-    void testSaveAndGetById() {
-        BankAccount savedAccount = bankRepository.save(account.get(0));
-        Optional<BankAccount> retrievedAccountOptional = bankRepository.findById(savedAccount.getId());
-        assertTrue(retrievedAccountOptional.isPresent());
-        BankAccount retrievedAccount = retrievedAccountOptional.get();
-        assertEquals(savedAccount, retrievedAccount);
-    }
+	@Test
+	void testSaveAndGetById() {
+		BankAccount savedAccount = bankRepository.save(account.get(0));
+		Optional<BankAccount> retrievedAccountOptional = bankRepository.findById(savedAccount.getId());
+		assertTrue(retrievedAccountOptional.isPresent());
+		BankAccount retrievedAccount = retrievedAccountOptional.get();
+		assertEquals(savedAccount, retrievedAccount);
+	}
 
-    @Test
-    void testFindAll() {
-        bankRepository.save(account.get(0));
-        bankRepository.save(account.get(1));
-        List<BankAccount> allAccounts = bankRepository.findAll();
-        assertEquals(2, allAccounts.size());
-    }
+	@Test
+	void testFindAll() {
+		bankRepository.save(account.get(0));
+		bankRepository.save(account.get(1));
+		List<BankAccount> allAccounts = bankRepository.findAll();
+		assertEquals(2, allAccounts.size());
+	}
 
 }
-

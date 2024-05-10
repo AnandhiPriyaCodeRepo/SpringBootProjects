@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 import com.demo.crud.entity.BankAccount;
 import com.demo.crud.repository.BankRepository;
 
-/**
- * 
- */
+import jakarta.validation.ConstraintViolationException;
+
 @Service
 public class BankService {
 
@@ -31,8 +30,9 @@ public class BankService {
 			BankAccount savedAccount = bankRepository.save(singleAccount);
 			return ResponseEntity.status(HttpStatus.CREATED).body(savedAccount);
 		} catch (DataIntegrityViolationException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-					"Unable to create the requested resource with accountNumber: " + singleAccount.getAccountNumber());
+			throw new DataIntegrityViolationException("Resource cannot be created " + ex.getMessage());
+		} catch (ConstraintViolationException e) {
+			throw new IllegalArgumentException("Resource cannot be created " + e.getMessage());
 		}
 	}
 
@@ -42,7 +42,9 @@ public class BankService {
 			List<BankAccount> savedAccounts = bankRepository.saveAll(multipleAccounts);
 			return ResponseEntity.status(HttpStatus.CREATED).body(savedAccounts);
 		} catch (DataIntegrityViolationException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to create the requested resources");
+			throw new DataIntegrityViolationException("Resources cannot be created " + ex.getMessage());
+		} catch (ConstraintViolationException e) {
+			throw new IllegalArgumentException("Resources cannot be created " + e.getMessage());
 		}
 	}
 
@@ -87,8 +89,10 @@ public class BankService {
 				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Resource not found for updation");
 			}
 		} catch (DataIntegrityViolationException ex) {
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Unable to update the requested resource with accountNumber: " + account.getAccountNumber());
+			throw new DataIntegrityViolationException(
+					"Unable to update the requested resource with accountNumber: " + account.getAccountNumber());
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Resource cannot be updated");
 		}
 	}
 
@@ -103,8 +107,10 @@ public class BankService {
 							+ account.getAccountNumber() + " is not found for updation");
 				}
 			} catch (DataIntegrityViolationException ex) {
-				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+				throw new DataIntegrityViolationException(
 						"Unable to update the requested resource with accountNumber: " + account.getAccountNumber());
+			} catch (Exception e) {
+				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Resource cannot be updated");
 			}
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("The patch update on all the accountholders was sucessfull");

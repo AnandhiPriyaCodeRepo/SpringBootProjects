@@ -5,6 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 @Entity
 public class BankAccount {
@@ -13,9 +16,15 @@ public class BankAccount {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
+	@NotNull
+	@NotBlank
+	@Pattern(regexp = "^[a-zA-Z ]*$", message = "Account holder name must be a name")
 	private String accountHolder;
 
 	@Column(unique = true)
+	@NotNull
+	@NotBlank
+	@Pattern(regexp = "\\d{10}", message = "Account number must be 10 digits")
 	private String accountNumber;
 
 	private Double balance;
